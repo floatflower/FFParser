@@ -1,8 +1,13 @@
 #include <QCoreApplication>
 
+#include "ffparser.h"
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    return a.exec();
+    FFParser p;
+    p.run();
+
+    return 0;
 }
