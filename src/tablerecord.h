@@ -6,17 +6,20 @@
 
 #include "rule.h"
 
-class TableRecord : public QObject
+class TableRecord : public QVector<Rule*>
 {
-    Q_OBJECT
 public:
-    explicit TableRecord(QObject *parent = nullptr);
-    void addRule(Rule* rule);
+    explicit TableRecord();
+    void findFirstSet();
+    QVector<QString> firstSet();
+    void mergeFirstSet(QVector<QString> firstSet);
+    bool derivedLamda();
 signals:
 
 public slots:
 private:
-    QVector<Rule*> m_rules;
+    bool m_hasFirset;
+    QVector<QString> m_firstSet;
 };
 
 #endif // TABLERECORD_H

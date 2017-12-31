@@ -39,6 +39,8 @@ void FFParser::run()
         qFatal("CFG file is required.");
     }
     buildTable();
+    Table *table = Table::instance();
+    table->findFirstSet();
 }
 
 void FFParser::buildTable()
@@ -64,7 +66,7 @@ void FFParser::buildTable()
                 r->addDerived(tokens.at(i));
             }
         }
-
-        m_table.addRule(currentToken, r);
+        Table *table = Table::instance();
+        table->addRule(currentToken, r);
     }
 }

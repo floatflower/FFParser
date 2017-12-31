@@ -16,14 +16,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += src/main.cpp \
     src/ffparser.cpp \
-    src/firstsetcache.cpp \
     src/rule.cpp \
     src/table.cpp \
     src/tablerecord.cpp
 
 HEADERS += \
     src/ffparser.h \
-    src/firstsetcache.h \
     src/rule.h \
     src/table.h \
     src/tablerecord.h

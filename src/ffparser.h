@@ -22,7 +22,6 @@ private:
     QString m_outputFilename;
     QFile m_cfgFile;
     QFile m_sourceCodeFile;
-    Table m_table;
 };
 
 #endif // FFPARSER_H

@@ -8,17 +8,21 @@
 #include "tablerecord.h"
 #include "rule.h"
 
-class Table : public QObject
+class Table : public QHash<QString, TableRecord*>
 {
-    Q_OBJECT
 public:
-    explicit Table(QObject *parent = nullptr);
-    void addRule(QString key, Rule *rule);
+    explicit Table();
+    void addRule(QString key, Rule* rule);
+    void findFirstSet();
+    QVector<QString> firstSet(QString key);
+    static Table* instance();
+    bool isNonterminal(QString key) { return (find(key) != end()); }
+    bool derivedLamda(QString key);
 signals:
 
 public slots:
 private:
-    QHash<QString, TableRecord*> m_table;
+    static Table* m_instance;
 };
 
 #endif // TABLE_H
