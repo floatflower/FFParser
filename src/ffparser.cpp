@@ -40,6 +40,8 @@ void FFParser::run()
     buildTable();
     Table *table = Table::instance();
     table->findFirstSet();
+    table->findFollowSet();
+    table->printTable();
 }
 
 void FFParser::buildTable()

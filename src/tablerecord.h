@@ -12,14 +12,23 @@ public:
     explicit TableRecord();
     void findFirstSet();
     QVector<QString> firstSet();
+    void findFollowSet();
+    QVector<QString> followSet();
     void mergeFirstSet(QVector<QString> firstSet);
+    void mergeFollowSet(QVector<QString> followSet);
     bool derivedLamda();
+    void setKey(QString key) { m_key = key; }
+    QString key() { return m_key; }
+
 signals:
 
 public slots:
 private:
     bool m_hasFirset;
     QVector<QString> m_firstSet;
+    QString m_key;
+    bool m_hasFollowSet;
+    QVector<QString> m_followSet;
 };
 
 #endif // TABLERECORD_H

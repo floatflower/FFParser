@@ -53,11 +53,6 @@ QVector<QString> Rule::firstSet()
     return m_firstSet;
 }
 
-void Rule::findFollowSet()
-{
-
-}
-
 QVector<QString> Rule::predictSet()
 {
 
@@ -69,7 +64,18 @@ void Rule::mergeFirstSet(QVector<QString>& firstSet)
          it_firstSet != firstSet.end();
          it_firstSet ++) {
         if (m_firstSet.indexOf(*it_firstSet) == -1) {
-            m_firstSet.append(*it_firstSet);
+            m_firstSet.push_back(*it_firstSet);
+        }
+    }
+}
+
+void Rule::mergeFollowSet(QVector<QString> followSet)
+{
+    for (QVector<QString>::iterator it_followSet = followSet.begin();
+         it_followSet != followSet.end();
+         it_followSet ++) {
+        if (m_followSet.indexOf(*it_followSet) == -1 && (*it_followSet) != "lamda") {
+            m_followSet.push_back(*it_followSet);
         }
     }
 }

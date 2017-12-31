@@ -17,10 +17,10 @@ public:
     bool derivedLamda() { return m_derivedLamda; }
     void findFirstSet();
     QVector<QString> firstSet();
-    void findFollowSet();
-    QVector<QString> followSet();
+    QVector<QString> followSet() { return m_followSet; }
     QVector<QString> predictSet();
     void mergeFirstSet(QVector<QString> &firstSet);
+    void mergeFollowSet(QVector<QString> followSet);
 signals:
 
 public slots:
@@ -28,7 +28,7 @@ private:
     int m_ruleNumber;
     QVector<QString> m_derived;
     QVector<QString> m_firstSet;
-    QVector<QString> m_followSet();
+    QVector<QString> m_followSet;
     bool m_derivedLamda;
     bool m_hasFirstSet;
 };

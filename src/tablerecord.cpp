@@ -1,8 +1,10 @@
 #include "tablerecord.h"
 #include <QDebug>
+#include "table.h"
 
 TableRecord::TableRecord()
     : m_hasFirset(false)
+    , m_hasFollowSet(false)
 {
 
 }
@@ -22,6 +24,88 @@ QVector<QString> TableRecord::firstSet()
     return m_firstSet;
 }
 
+void TableRecord::findFollowSet()
+{
+    if (m_hasFollowSet) return;
+    Table *table = Table::instance();
+    for (TableRecord::iterator it_tableRecord = begin();
+         it_tableRecord != end();
+         it_tableRecord ++) {
+        // iterate all rule.
+
+        if ((*it_tableRecord)->derivedLamda()) {
+
+            /**
+             * Iterator whole table to find who derive the "key()"
+             */
+
+            for (Table::iterator it_searchTable = table->begin();
+                 it_searchTable != table->end();
+                 it_searchTable ++) {
+
+                for (TableRecord::iterator it_searchTableRecord = (*it_searchTable)->begin();
+                     it_searchTableRecord != (*it_searchTable)->end();
+                     it_searchTableRecord ++) {
+
+                    QVector<QString> derived = (*it_searchTableRecord)->derived();
+                    int derivedSize = derived.size();
+                    int derivedIndex = derived.indexOf(key());
+                    bool tmp_derivedLamda = false;
+
+                    if (derivedIndex != -1) {
+                        for (int i = derivedIndex + 1; i < derivedSize; i ++) {
+                            if (table->isNonterminal(derived.at(i))) {
+
+                                QVector<QString> tmp_firstSet = table->firstSet(derived.at(i));
+
+                                (*it_tableRecord)->mergeFollowSet(tmp_firstSet);
+
+                                tmp_derivedLamda = table->derivedLamda(derived.at(i));
+
+                            }
+                            else {
+                                QVector<QString> terminal;
+                                terminal.push_back(derived.at(i));
+                                (*it_tableRecord)->mergeFollowSet(terminal);
+                                tmp_derivedLamda = false;
+                            }
+                            if (!tmp_derivedLamda) break;
+
+                        }
+                        if (derivedIndex + 1 == derivedSize) {
+                            tmp_derivedLamda = true;
+                        }
+                        if (tmp_derivedLamda && (*it_searchTable)->key() != key()) {
+                            (*it_tableRecord)->mergeFollowSet(table->followSet((*it_searchTable)->key()));
+                        }
+                    }
+
+
+                }
+
+            }
+
+        }
+
+    }
+}
+
+QVector<QString> TableRecord::followSet()
+{
+    if (!m_hasFollowSet) {
+        findFollowSet();
+        for (TableRecord::iterator it_tableRecord = begin();
+             it_tableRecord != end();
+             it_tableRecord ++) {
+
+            mergeFollowSet((*it_tableRecord)->followSet());
+
+        }
+    }
+    m_hasFollowSet = true;
+    return m_followSet;
+}
+
 void TableRecord::mergeFirstSet(QVector<QString> firstSet)
 {
     for (QVector<QString>::iterator it_firstSet = firstSet.begin();
@@ -32,6 +116,17 @@ void TableRecord::mergeFirstSet(QVector<QString> firstSet)
         }
     }
     m_hasFirset = true;
+}
+
+void TableRecord::mergeFollowSet(QVector<QString> followSet)
+{
+    for (QVector<QString>::iterator it_followSet = followSet.begin();
+         it_followSet != followSet.end();
+         it_followSet ++) {
+        if (m_followSet.indexOf(*it_followSet) == -1) {
+            m_followSet.push_back(*it_followSet);
+        }
+    }
 }
 
 bool TableRecord::derivedLamda()
