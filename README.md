@@ -19,8 +19,7 @@ $ make
 
 ### Execute
 ```
-$ ./ffparser
-                --cfg,-c <CFG_FILE>
+$ ./ffparser    --cfg,-c <CFG_FILE>
                 --source,-s <SOURCE_CODE_PATH>
                 --output,-o <OUTPUT_FILE_PATH>
 ```
