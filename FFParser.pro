@@ -25,3 +25,8 @@ HEADERS += \
     src/rule.h \
     src/table.h \
     src/tablerecord.h
+
+TARGET = ffparser
+
+DISTFILES += \
+    README.md

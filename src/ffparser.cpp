@@ -5,7 +5,6 @@
 #include <iostream>
 #include <QRegExp>
 
-#include "firstsetcache.h"
 #include "rule.h"
 #include "tablerecord.h"
 #include "table.h"
