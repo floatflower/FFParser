@@ -18,6 +18,7 @@ public:
     void findFirstSet();
     QVector<QString> firstSet();
     QVector<QString> followSet() { return m_followSet; }
+    void findPredictSet();
     QVector<QString> predictSet();
     void mergeFirstSet(QVector<QString> &firstSet);
     void mergeFollowSet(QVector<QString> followSet);
@@ -29,6 +30,7 @@ private:
     QVector<QString> m_derived;
     QVector<QString> m_firstSet;
     QVector<QString> m_followSet;
+    QVector<QString> m_predictSet;
     bool m_derivedLamda;
     bool m_hasFirstSet;
 };

@@ -41,6 +41,7 @@ void FFParser::run()
     Table *table = Table::instance();
     table->findFirstSet();
     table->findFollowSet();
+    table->findPreictSet();
     table->printTable();
 }
 

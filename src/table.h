@@ -7,6 +7,7 @@
 
 #include "tablerecord.h"
 #include "rule.h"
+#include "lookaheadtable.h"
 
 class Table : public QHash<QString, TableRecord*>
 {
@@ -15,17 +16,21 @@ public:
     void addRule(QString key, Rule* rule);
     void findFirstSet();
     void findFollowSet();
+    void findPreictSet();
     QVector<QString> firstSet(QString key);
     QVector<QString> followSet(QString key);
     static Table* instance();
     bool isNonterminal(QString key) { return (find(key) != end()); }
     bool derivedLamda(QString key);
     void printTable();
+    void addTerminal(QString terminal);
 signals:
 
 public slots:
 private:
     static Table* m_instance;
+    QVector<QString> m_terminal;
+    LookAheadTable m_lookAheadTable;
 };
 
 #endif // TABLE_H

@@ -42,9 +42,6 @@ void Rule::findFirstSet()
             break;
         }
     }
-    //qDebug() << "Rule" << m_ruleNumber
-    //         << ", First set: " << m_firstSet
-    //         << ", derived lamda: " << m_derivedLamda;
 }
 
 QVector<QString> Rule::firstSet()
@@ -53,9 +50,25 @@ QVector<QString> Rule::firstSet()
     return m_firstSet;
 }
 
+void Rule::findPredictSet()
+{
+    for (QVector<QString>::iterator it_firstSet = m_firstSet.begin();
+         it_firstSet != m_firstSet.end();
+         it_firstSet ++) {
+        m_predictSet.push_back(*it_firstSet);
+    }
+    if (m_derivedLamda) {
+        for (QVector<QString>::iterator it_followSet = m_followSet.begin();
+             it_followSet != m_followSet.end();
+             it_followSet ++) {
+            m_predictSet.push_back(*it_followSet);
+        }
+    }
+}
+
 QVector<QString> Rule::predictSet()
 {
-
+    return m_predictSet;
 }
 
 void Rule::mergeFirstSet(QVector<QString>& firstSet)

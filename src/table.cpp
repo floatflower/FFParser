@@ -1,5 +1,8 @@
 #include "table.h"
+
 #include <QDebug>
+#include <iostream>
+
 
 Table* Table::m_instance = nullptr;
 
@@ -45,9 +48,7 @@ void Table::findFollowSet()
     for (Table::iterator it_table = begin();
          it_table != end();
          it_table ++) {
-        if ((*it_table)->derivedLamda()) {
-            (*it_table)->findFollowSet();
-        }
+         (*it_table)->findFollowSet();
     }
 }
 
@@ -55,6 +56,23 @@ QVector<QString> Table::followSet(QString key)
 {
     Table::iterator it_table = find(key);
     return (*it_table)->followSet();
+}
+
+void Table::findPreictSet()
+{
+    for (Table::iterator it_table = begin();
+         it_table != end();
+         it_table ++) {
+
+        for (TableRecord::iterator it_tableRecord = (*it_table)->begin();
+             it_tableRecord != (*it_table)->end();
+             it_tableRecord ++) {
+
+            (*it_tableRecord)->findPredictSet();
+
+        }
+
+    }
 }
 
 bool Table::derivedLamda(QString key)
@@ -84,9 +102,92 @@ void Table::printTable()
             qDebug() << "Rule" << (*it_tableRecord)->ruleNumber() << ": \n"
                      << "First set: " << (*it_tableRecord)->firstSet() << "\n"
                      << "Derived lamda: " << (*it_tableRecord)->derivedLamda() << "\n"
-                     << "Follow set: " << (*it_tableRecord)->followSet() << "\n";
+                     << "Follow set: " << (*it_tableRecord)->followSet() << "\n"
+                     << "Predict set: " << (*it_tableRecord)->predictSet() << "\n";
 
         }
 
+    }
+    for (Table::iterator it_table = begin();
+             it_table != end();
+             it_table ++) {
+
+        for (TableRecord::iterator it_tableRecord = (*it_table)->begin();
+             it_tableRecord != (*it_table)->end();
+             it_tableRecord ++) {
+
+            QVector<QString> m_derived = (*it_tableRecord)->derived();
+            for (QVector<QString>::iterator it_derived = m_derived.begin();
+                 it_derived != m_derived.end();
+                 it_derived ++) {
+                if (!isNonterminal(*it_derived) && (*it_derived) != "lamda") {
+                    m_terminal.push_back(*it_derived);
+                }
+            }
+
+        }
+
+    }
+    std::cout << "LL1 Table: "<< std::endl;
+    for (Table::iterator it_table = begin();
+             it_table != end();
+             it_table ++) {
+        for (TableRecord::iterator it_tableRecord = (*it_table)->begin();
+             it_tableRecord != (*it_table)->end();
+             it_tableRecord ++) {
+
+            QVector<QString> predictSet = (*it_tableRecord)->predictSet();
+
+            for (QVector<QString>::iterator it_terminal = m_terminal.begin();
+                 it_terminal != m_terminal.end();
+                 it_terminal ++) {
+                if (predictSet.indexOf(*it_terminal) != -1) {
+                    m_lookAheadTable.addRule((*it_table)->key(),
+                                             *it_terminal,
+                                             (*it_tableRecord)->ruleNumber());
+                }
+            }
+
+        }
+
+    }
+    std::cout << "\t";
+    for (QVector<QString>::iterator it_terminal = m_terminal.begin();
+         it_terminal != m_terminal.end();
+         it_terminal ++) {
+
+        std::cout << (*it_terminal).toStdString().c_str() << "\t";
+
+    }
+    std::cout << std::endl;
+    QHash<QString, QHash<QString, int>> lookAheadTable = m_lookAheadTable.table();
+    for (QHash<QString, QHash<QString, int>>::iterator it_lookAheadTable = lookAheadTable.begin();
+         it_lookAheadTable != lookAheadTable.end();
+         it_lookAheadTable ++) {
+
+        std::cout << it_lookAheadTable.key().toStdString().c_str() << "\t";
+        for (QVector<QString>::iterator it_terminal = m_terminal.begin();
+             it_terminal != m_terminal.end();
+             it_terminal ++) {
+
+            QHash<QString, int>::iterator it_row = (*it_lookAheadTable).find(*it_terminal);
+            if (it_row != (*it_lookAheadTable).end()) {
+                std::cout << *it_row << "\t";
+            }
+            else {
+                std::cout << "\t";
+            }
+
+        }
+
+        std::cout << std::endl;
+
+    }
+}
+
+void Table::addTerminal(QString terminal)
+{
+    if (m_terminal.indexOf(terminal) == -1) {
+        m_terminal.push_back(terminal);
     }
 }

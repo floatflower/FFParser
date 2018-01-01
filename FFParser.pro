@@ -18,13 +18,15 @@ SOURCES += src/main.cpp \
     src/ffparser.cpp \
     src/rule.cpp \
     src/table.cpp \
-    src/tablerecord.cpp
+    src/tablerecord.cpp \
+    src/lookaheadtable.cpp
 
 HEADERS += \
     src/ffparser.h \
     src/rule.h \
     src/table.h \
-    src/tablerecord.h
+    src/tablerecord.h \
+    src/lookaheadtable.h
 
 TARGET = ffparser
 
