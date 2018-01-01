@@ -11,6 +11,7 @@ public:
     explicit LookAheadTable(QObject *parent = nullptr);
     void addRule(QString nonterminal, QString terminal, int ruleNumber);
     QHash<QString, QHash<QString, int>> table() { return m_lookAheadTable; }
+    int findRule(QString source, QString target);
 signals:
 
 public slots:

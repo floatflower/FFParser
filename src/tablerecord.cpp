@@ -26,26 +26,27 @@ QVector<QString> TableRecord::firstSet()
 
 void TableRecord::findFollowSet()
 {
-    if (m_hasFollowSet) return;
-    qDebug() << "Find Follow" << key();
+    //qDebug() << "Find Follow" << key();
+
     Table *table = Table::instance();
+    //qDebug() << "Current finding is:" << table->currentFindingFollow();
     for (TableRecord::iterator it_tableRecord = begin();
          it_tableRecord != end();
          it_tableRecord ++) {
         // iterate all rule.
 
-            /**
-             * Iterator whole table to find who derive the "key()"
-             */
+        /**
+         * Iterator whole table to find who derive the "key()"
+         */
 
         for (Table::iterator it_searchTable = table->begin();
              it_searchTable != table->end();
              it_searchTable ++) {
-
+            //qDebug() << "Searching Record..." << it_searchTable.key();
             for (TableRecord::iterator it_searchTableRecord = (*it_searchTable)->begin();
                  it_searchTableRecord != (*it_searchTable)->end();
                  it_searchTableRecord ++) {
-
+                //qDebug() << "Searching Rule..." << (*it_searchTableRecord)->ruleNumber();
                 QVector<QString> derived = (*it_searchTableRecord)->derived();
                 int derivedSize = derived.size();
                 int derivedIndex = derived.indexOf(key());
@@ -53,7 +54,7 @@ void TableRecord::findFollowSet()
 
                 if (derivedIndex != -1) {
                     for (int i = derivedIndex + 1; i < derivedSize; i ++) {
-                        qDebug() << "Find first " << derived.at(i);
+                        //qDebug() << "Find first " << derived.at(i);
                         if (table->isNonterminal(derived.at(i))) {
                             QVector<QString> tmp_firstSet = table->firstSet(derived.at(i));
 
@@ -72,10 +73,12 @@ void TableRecord::findFollowSet()
 
                     }
                     if (derivedIndex + 1 == derivedSize) {
-                        qDebug() << "is" << derivedIndex << "element";
+                        //qDebug() << "is last element";
                         tmp_derivedLamda = true;
                     }
-                    if (tmp_derivedLamda && (*it_searchTable)->key() != key()) {
+                    if (tmp_derivedLamda
+                            && table->currentFindingFollow() != (*it_searchTable)->key()) {
+                        //qDebug() << "get follow set" << (*it_searchTable)->key();
                         (*it_tableRecord)->mergeFollowSet(table->followSet((*it_searchTable)->key()));
                     }
                 }
@@ -95,12 +98,9 @@ QVector<QString> TableRecord::followSet()
         for (TableRecord::iterator it_tableRecord = begin();
              it_tableRecord != end();
              it_tableRecord ++) {
-            if ((*it_tableRecord)->derivedLamda()) {
                 mergeFollowSet((*it_tableRecord)->followSet());
-            }
         }
     }
-    m_hasFollowSet = true;
     return m_followSet;
 }
 

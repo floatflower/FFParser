@@ -19,3 +19,15 @@ void LookAheadTable::addRule(QString nonterminal, QString terminal, int ruleNumb
         m_lookAheadTable.insert(nonterminal, newRow);
     }
 }
+
+int LookAheadTable::findRule(QString source, QString target)
+{
+    QHash<QString, QHash<QString,int>>::iterator it_terminalMap
+            = m_lookAheadTable.find(source);
+
+    QHash<QString, int>::iterator it_row = (*it_terminalMap).find(target);
+    if (it_row != (*it_terminalMap).end()) {
+        return *it_row;
+    }
+    else return -1;
+}

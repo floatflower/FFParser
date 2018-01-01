@@ -14,6 +14,7 @@ Table::Table()
 void Table::addRule(QString key, Rule* rule)
 {
     Table::iterator it_table = find(key);
+    m_ruleMap.insert(rule->ruleNumber(), rule);
     if (it_table != end()) {
         // Exist
         (*it_table)->push_back(rule);
@@ -25,6 +26,15 @@ void Table::addRule(QString key, Rule* rule)
         r->setKey(key);
         insert(key, r);
     }
+}
+
+Rule *Table::rule(int ruleNumber)
+{
+    QHash<int, Rule*>::iterator it_rule = m_ruleMap.find(ruleNumber);
+    if (it_rule != m_ruleMap.end()) {
+        return *it_rule;
+    }
+    return nullptr;
 }
 
 void Table::findFirstSet()
@@ -48,7 +58,8 @@ void Table::findFollowSet()
     for (Table::iterator it_table = begin();
          it_table != end();
          it_table ++) {
-         (*it_table)->findFollowSet();
+        m_currentFindingFollow = it_table.key();
+        (*it_table)->findFollowSet();
     }
 }
 
@@ -100,6 +111,7 @@ void Table::printTable()
              it_tableRecord ++) {
 
             qDebug() << "Rule" << (*it_tableRecord)->ruleNumber() << ": \n"
+                     << "Derived:" << (*it_tableRecord)->derived() << "\n"
                      << "First set: " << (*it_tableRecord)->firstSet() << "\n"
                      << "Derived lamda: " << (*it_tableRecord)->derivedLamda() << "\n"
                      << "Follow set: " << (*it_tableRecord)->followSet() << "\n"

@@ -19,7 +19,8 @@ public:
     bool derivedLamda();
     void setKey(QString key) { m_key = key; }
     QString key() { return m_key; }
-
+    void setHasFollowSet(bool set) { m_hasFollowSet = set; }
+    bool hasFollowSet() { return m_hasFollowSet; }
 signals:
 
 public slots:

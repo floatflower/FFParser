@@ -8,7 +8,7 @@
 #include "rule.h"
 #include "tablerecord.h"
 #include "table.h"
-
+#include "sourcecodehandler.h"
 
 FFParser::FFParser(QObject *parent) : QObject(parent)
 {
@@ -43,6 +43,33 @@ void FFParser::run()
     table->findFollowSet();
     table->findPreictSet();
     table->printTable();
+    readSourceCodeLine();
+
+    for (QVector<QStringList>::iterator it_line = m_sourceCodeLine.begin();
+         it_line != m_sourceCodeLine.end();
+         it_line ++) {
+
+        SourceCodeHandler handler;
+        handler.setStartPoint(m_startPoint);
+        handler.process(*it_line);
+        QVector<int> result = handler.ruleApplyOrder();
+
+        for (QStringList::iterator it_rawLine = (*it_line).begin();
+             it_rawLine != (*it_line).end();
+             it_rawLine ++) {
+            std::cout << (*it_rawLine).toStdString().c_str() << " ";
+        }
+
+        for (QVector<int>::iterator it_result = result.begin();
+             it_result != result.end();
+             it_result ++) {
+            std::cout << (*it_result) << " ";
+        }
+
+        handler.isAccept() ? std::cout << std::endl : std::cout << "Error" << std::endl;
+
+    }
+
 }
 
 void FFParser::buildTable()
@@ -57,18 +84,36 @@ void FFParser::buildTable()
         QStringList tokens = line.split(QRegExp("[ \t\r\n\f]"));
         Rule *r = new Rule();
         r->setRuleNumber(tokens.at(0).toInt());
+        if (tokens.at(0).toInt() == 1) {
+            m_startPoint = tokens.at(1);
+        }
         if (tokens.at(1) != QString("|")) {
             currentToken = tokens.at(1);
             for (int i =3; i < tokens.size(); i ++) {
+                if (tokens.at(i) == "lamda") continue;
                 r->addDerived(tokens.at(i));
             }
         }
         else {
             for (int i =2; i < tokens.size(); i ++) {
+                if (tokens.at(i) == "lamda") continue;
                 r->addDerived(tokens.at(i));
             }
         }
         Table *table = Table::instance();
         table->addRule(currentToken, r);
+    }
+}
+
+void FFParser::readSourceCodeLine()
+{
+    while(!m_sourceCodeFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qFatal("Source code file cannot be opened");
+    }
+    while(!m_sourceCodeFile.atEnd()) {
+        QString line(m_sourceCodeFile.readLine());
+        line = line.trimmed();
+        QStringList tokens = line.split(QRegExp("[ \t\r\n\f]"));
+        m_sourceCodeLine.push_back(tokens);
     }
 }

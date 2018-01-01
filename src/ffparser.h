@@ -14,6 +14,7 @@ public:
     explicit FFParser(QObject *parent = nullptr);
     void run();
     void buildTable();
+    void readSourceCodeLine();
 signals:
 
 public slots:
@@ -22,6 +23,8 @@ private:
     QString m_outputFilename;
     QFile m_cfgFile;
     QFile m_sourceCodeFile;
+    QVector<QStringList> m_sourceCodeLine;
+    QString m_startPoint;
 };
 
 #endif // FFPARSER_H
