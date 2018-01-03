@@ -12,6 +12,6 @@ script:
     - make
 
 after_success:
-    - ffparser --cfg test_data/case1/case1.cfg --source test_data/case1/case1.source
-    - ffparser --cfg test_data/case2/case2.cfg --source test_data/case2/case2.source
-    - ffparser --cfg test_data/case3/case3.cfg --source test_data/case3/case3.source
+    - ./ffparser --cfg test_data/case1/case1.cfg --source test_data/case1/case1.source
+    - ./ffparser --cfg test_data/case2/case2.cfg --source test_data/case2/case2.source
+    - ./ffparser --cfg test_data/case3/case3.cfg --source test_data/case3/case3.source
