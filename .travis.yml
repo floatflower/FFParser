@@ -1,0 +1,17 @@
+dist: trusty
+sudo: required
+
+before_install:
+    - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
+
+script:
+    - qmake -qt=qt5 -v
+    - qmake -qt=qt5
+    - make
+
+after_success:
+    - ffparser --cfg test_data/case1/case1.cfg --source test_data/case1/case1.source
+    - ffparser --cfg test_data/case2/case2.cfg --source test_data/case2/case2.source
+    - ffparser --cfg test_data/case3/case3.cfg --source test_data/case3/case3.source

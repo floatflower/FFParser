@@ -1,5 +1,6 @@
 FFParser
 ===
+[![Build Status](https://travis-ci.org/floatflower/FFParser.svg?branch=master)](https://travis-ci.org/floatflower/FFParser)
 
 這個專案是為了編譯原理所開發的 LL(1) Parser。
 This LL(1) Parser is the final project for the class "compiler"。
