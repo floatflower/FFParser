@@ -1,6 +1,8 @@
 dist: trusty
 sudo: required
-
+branches:
+  only:
+    - v1.1
 before_install:
     - sudo add-apt-repository ppa:beineri/opt-qt562-trusty --yes
     - sudo apt-get update
