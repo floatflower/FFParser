@@ -54,8 +54,8 @@ void TableRecord::findFollowSet()
                 bool tmp_derivedLamda = false;
 
                 if (derivedAmount != 0) {
-                    for (int i = 1; i <= derivedAmount; i ++) {
-                        int derivedIndex = derived.indexOf(key(), i);
+                    for (int eachDerived = 1; eachDerived <= derivedAmount; eachDerived ++) {
+                        int derivedIndex = derived.indexOf(key(), eachDerived);
                         for (int i = derivedIndex + 1; i < derivedSize; i ++) {
                             //qDebug() << "Find first " << derived.at(i);
                             if (table->isNonterminal(derived.at(i))) {
