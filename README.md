@@ -13,8 +13,11 @@ This LL(1) Parser is the final project for the class "compiler"。
 ## How to use
 ### Compile this project
 ```
-$ sudo apt-get install qt5base-dev qt5-qmake
-$ qmake
+$ sudo add-apt-repository ppa:beineri/opt-qt562-trusty
+$ sudo apt-get update
+$ sudo apt-get install -qq qt5-qmake qt56base
+$ source /opt/qt56/bin/qt56-env.sh
+$ /opt/qt56/bin/qmake
 $ make
 ```
 
