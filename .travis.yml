@@ -15,3 +15,5 @@ after_success:
     - ./ffparser --cfg test_data/case1/case1.cfg --source test_data/case1/case1.source
     - ./ffparser --cfg test_data/case2/case2.cfg --source test_data/case2/case2.source
     - ./ffparser --cfg test_data/case3/case3.cfg --source test_data/case3/case3.source
+    - ./ffparser --cfg test_data/case4/case4.cfg --source test_data/case4/case4.source
+    - ./ffparser --cfg test_data/case/case5.cfg --source test_data/case5/case5.source
