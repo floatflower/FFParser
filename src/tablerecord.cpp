@@ -49,41 +49,47 @@ void TableRecord::findFollowSet()
                 //qDebug() << "Searching Rule..." << (*it_searchTableRecord)->ruleNumber();
                 QVector<QString> derived = (*it_searchTableRecord)->derived();
                 int derivedSize = derived.size();
-                int derivedIndex = derived.indexOf(key());
+                int derivedAmount = derived.count(key());
+
                 bool tmp_derivedLamda = false;
 
-                if (derivedIndex != -1) {
-                    for (int i = derivedIndex + 1; i < derivedSize; i ++) {
-                        //qDebug() << "Find first " << derived.at(i);
-                        if (table->isNonterminal(derived.at(i))) {
-                            QVector<QString> tmp_firstSet = table->firstSet(derived.at(i));
+                if (derivedAmount != 0) {
+                    int thisDerived = 0;
+                    for (int eachDerived = 1; eachDerived <= derivedAmount; eachDerived ++) {
+                        int derivedIndex = derived.indexOf(key(), thisDerived);
+                        thisDerived = derivedIndex + 1;
+                        for (int i = derivedIndex + 1; i < derivedSize; i ++) {
+                            //qDebug() << "Find first " << derived.at(i);
+                            if (table->isNonterminal(derived.at(i))) {
+                                QVector<QString> tmp_firstSet = table->firstSet(derived.at(i));
 
-                            (*it_tableRecord)->mergeFollowSet(tmp_firstSet);
+                                (*it_tableRecord)->mergeFollowSet(tmp_firstSet);
 
-                            tmp_derivedLamda = table->derivedLamda(derived.at(i));
+                                tmp_derivedLamda = table->derivedLamda(derived.at(i));
+
+                            }
+                            else {
+                                QVector<QString> terminal;
+                                terminal.push_back(derived.at(i));
+                                (*it_tableRecord)->mergeFollowSet(terminal);
+                                tmp_derivedLamda = false;
+                            }
+                            if (!tmp_derivedLamda) break;
 
                         }
-                        else {
-                            QVector<QString> terminal;
-                            terminal.push_back(derived.at(i));
-                            (*it_tableRecord)->mergeFollowSet(terminal);
-                            tmp_derivedLamda = false;
+                        if (derivedIndex + 1 == derivedSize) {
+                            //qDebug() << "is last element";
+                            tmp_derivedLamda = true;
                         }
-                        if (!tmp_derivedLamda) break;
+                        if (tmp_derivedLamda
+                                && table->currentFindingFollow() != (*it_searchTable)->key()) {
+                            //qDebug() << "get follow set" << (*it_searchTable)->key();
+                            (*it_tableRecord)->mergeFollowSet(table->followSet((*it_searchTable)->key()));
+                        }
 
                     }
-                    if (derivedIndex + 1 == derivedSize) {
-                        //qDebug() << "is last element";
-                        tmp_derivedLamda = true;
-                    }
-                    if (tmp_derivedLamda
-                            && table->currentFindingFollow() != (*it_searchTable)->key()) {
-                        //qDebug() << "get follow set" << (*it_searchTable)->key();
-                        (*it_tableRecord)->mergeFollowSet(table->followSet((*it_searchTable)->key()));
-                    }
+
                 }
-
-
             }
 
         }
