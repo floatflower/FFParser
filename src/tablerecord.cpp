@@ -38,6 +38,7 @@ void TableRecord::findFollowSet()
         /**
          * Iterator whole table to find who derive the "key()"
          */
+        //if (!(*it_tableRecord)->derivedLamda()) continue;
 
         for (Table::iterator it_searchTable = table->begin();
              it_searchTable != table->end();
@@ -84,7 +85,9 @@ void TableRecord::findFollowSet()
                         if (tmp_derivedLamda
                                 && table->currentFindingFollow() != (*it_searchTable)->key()) {
                             //qDebug() << "get follow set" << (*it_searchTable)->key();
+
                             (*it_tableRecord)->mergeFollowSet(table->followSet((*it_searchTable)->key()));
+
                         }
 
                     }
@@ -100,7 +103,11 @@ void TableRecord::findFollowSet()
 QVector<QString> TableRecord::followSet()
 {
     if (!m_hasFollowSet) {
-        findFollowSet();
+        Table *table = Table::instance();
+        if (!table->m_currentFindingRecord.contains(key())) {
+            table->m_currentFindingRecord.push_back(key());
+            findFollowSet();
+        }
         for (TableRecord::iterator it_tableRecord = begin();
              it_tableRecord != end();
              it_tableRecord ++) {

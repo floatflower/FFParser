@@ -27,6 +27,7 @@ public:
     void addTerminal(QString terminal);
     QString currentFindingFollow() { return m_currentFindingFollow; }
     LookAheadTable* lookAheadTable() { return &m_lookAheadTable; }
+    QVector<QString> m_currentFindingRecord;
 signals:
 
 public slots:
