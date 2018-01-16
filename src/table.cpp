@@ -59,7 +59,9 @@ void Table::findFollowSet()
          it_table != end();
          it_table ++) {
         m_currentFindingFollow = it_table.key();
+        m_currentFindingRecord.push_back(it_table.key());
         (*it_table)->findFollowSet();
+        m_currentFindingRecord.clear();
     }
 }
 
@@ -163,7 +165,7 @@ void Table::printTable()
         }
 
     }
-    std::cout << "\t";
+    std::cout << "\t\t";
     for (QVector<QString>::iterator it_terminal = m_terminal.begin();
          it_terminal != m_terminal.end();
          it_terminal ++) {
@@ -177,7 +179,7 @@ void Table::printTable()
          it_lookAheadTable != lookAheadTable.end();
          it_lookAheadTable ++) {
 
-        std::cout << it_lookAheadTable.key().toStdString().c_str() << "\t";
+        std::cout << it_lookAheadTable.key().toStdString().c_str() << "\t\t";
         for (QVector<QString>::iterator it_terminal = m_terminal.begin();
              it_terminal != m_terminal.end();
              it_terminal ++) {

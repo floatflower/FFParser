@@ -23,7 +23,7 @@ void Rule::findFirstSet()
 
             QVector<QString> firstSet = table->firstSet(*it_derived);
             mergeFirstSet(firstSet);
-
+            m_derivedLamda &= table->derivedLamda(*it_derived);
         }
         else {
             if (*it_derived != "lamda") {
@@ -36,6 +36,7 @@ void Rule::findFirstSet()
             break;
         }
         if (table->derivedLamda(*it_derived)) {
+
             continue;
         }
         else {
@@ -46,7 +47,7 @@ void Rule::findFirstSet()
 
 QVector<QString> Rule::firstSet()
 {
-    if (!m_hasFirstSet) findFirstSet();
+    findFirstSet();
     return m_firstSet;
 }
 
